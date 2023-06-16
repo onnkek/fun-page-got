@@ -1,29 +1,43 @@
 import React, { Component } from "react";
 import { Col, Container, Row } from "reactstrap";
-import CharDetails from "../charDetails/charDetails";
 import RandomChar from "../randomChar";
-import ItemList from "../itemList";
 import Header from "../header";
+import ErrorMessage from "../errorMessage";
 import './app.sass';
+import CharacterPage from "../characterPage/characterPage";
 
 export default class App extends Component {
 
     state = {
-        randomChar: true
+        randomChar: true,
+        error: false
+    }
+
+    componentDidCatch() {
+        console.log('ХУЕТА СЛУЧИЛАСЯ!!!');
+        this.setState({
+            error: true
+        });
     }
 
     toggleRandomBlock = () => {
-        this.setState({
-            randomChar: !this.state.randomChar
+        this.setState((state) => {
+            return {
+                randomChar: !state.randomChar
+            }
         });
         console.log('CHANGE!!');
     }
 
     render() {
-        
+
         const randomBlock = this.state.randomChar ? <RandomChar /> : null;
-        
+
         const toggleButton = this.state.randomChar ? "Hide" : "Show";
+
+        if (this.state.error) {
+            return <ErrorMessage />
+        }
 
         return (
             <>
@@ -40,14 +54,9 @@ export default class App extends Component {
                             >{toggleButton} Random Character</button>
                         </Col>
                     </Row>
-                    <Row>
-                        <Col md='6'>
-                            <ItemList />
-                        </Col>
-                        <Col md='6'>
-                            <CharDetails />
-                        </Col>
-                    </Row>
+                    <CharacterPage />
+                    <CharacterPage />
+                    <CharacterPage />
                 </Container>
             </>
         );
